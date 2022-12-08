@@ -2,16 +2,15 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 from sklearn.preprocessing import MinMaxScaler
-from PIL import Image
 
 #load the model from disk
 import joblib
 model = joblib.load(r"model.sav")
 
 def preprocess(df, option):
-    """
-    This function is to cover all the preprocessing steps on the churn dataframe. It involves selecting important features, encoding categorical data, handling missing values,feature scaling and splitting the data
-    """
+
+    #This function selects important features, encoding categorical data, handling missing values,feature scaling and splitting the data
+
     #Defining the map function
     def binary_map(feature):
         return feature.map({'Yes':1, 'No':0})
@@ -47,44 +46,43 @@ def preprocess(df, option):
 
 def main():
     #Setting Application title
-    st.title('Telco Customer Churn Prediction App')
+    st.title('Customer Churn Prediction')
 
-      #Setting Application description
+    #Setting Application description
     st.markdown("""
-     :dart:  This Streamlit app is made to predict customer churn in a ficitional telecommunication use case.
-    The application is functional for both online prediction and batch data prediction. \n
+     :dart:  This app helps you Predict Customer Churn in the case of a fictional Telecommunications Company.\n
+     Dataset Used : "https://github.com/IBM/telco-customer-churn-on-icp4d/tree/master/data/Telco-Customer-Churn.csv"
     """)
     st.markdown("<h3></h3>", unsafe_allow_html=True)
 
     add_selectbox = st.sidebar.selectbox(
-	"How would you like to predict?", ("Online", "Batch"))
-    st.sidebar.info('This app is created to predict Customer Churn')
+	"How would you like to Predict?", ("Online", "Batch"))
 
     if add_selectbox == "Online":
-        st.info("Input data below")
+        st.info("Fill in the Details Below to Predict Customer Churn")
         #Based on our optimal features selection
-        st.subheader("Demographic data")
+        st.subheader("Demographic Data")
         seniorcitizen = st.selectbox('Senior Citizen:', ('Yes', 'No'))
         dependents = st.selectbox('Dependent:', ('Yes', 'No'))
 
 
-        st.subheader("Payment data")
-        tenure = st.slider('Number of months the customer has stayed with the company', min_value=0, max_value=72, value=0)
-        contract = st.selectbox('Contract', ('Month-to-month', 'One year', 'Two year'))
+        st.subheader("Payment Data")
+        tenure = st.slider('Number of Months the Customer has Stayed with the Company', min_value=0, max_value=72, value=0)
+        contract = st.selectbox('Contract', ('Month-to-Month', 'One Year', 'Two Year'))
         paperlessbilling = st.selectbox('Paperless Billing', ('Yes', 'No'))
         PaymentMethod = st.selectbox('PaymentMethod',('Electronic check', 'Mailed check', 'Bank transfer (automatic)','Credit card (automatic)'))
-        monthlycharges = st.number_input('The amount charged to the customer monthly', min_value=0, max_value=150, value=0)
-        totalcharges = st.number_input('The total amount charged to the customer',min_value=0, max_value=10000, value=0)
+        monthlycharges = st.number_input('Amount Charged to the Customer Monthly', min_value=0, max_value=150, value=0)
+        totalcharges = st.number_input('Total Amount Charged to the Customer',min_value=0, max_value=10000, value=0)
 
-        st.subheader("Services signed up for")
-        mutliplelines = st.selectbox("Does the customer have multiple lines",('Yes','No','No phone service'))
-        phoneservice = st.selectbox('Phone Service:', ('Yes', 'No'))
-        internetservice = st.selectbox("Does the customer have internet service", ('DSL', 'Fiber optic', 'No'))
-        onlinesecurity = st.selectbox("Does the customer have online security",('Yes','No','No internet service'))
-        onlinebackup = st.selectbox("Does the customer have online backup",('Yes','No','No internet service'))
-        techsupport = st.selectbox("Does the customer have technology support", ('Yes','No','No internet service'))
-        streamingtv = st.selectbox("Does the customer stream TV", ('Yes','No','No internet service'))
-        streamingmovies = st.selectbox("Does the customer stream movies", ('Yes','No','No internet service'))
+        st.subheader("Services Signed up for")
+        mutliplelines = st.selectbox("Does the Customer have Multiple Lines?",('Yes','No','No phone service'))
+        phoneservice = st.selectbox('Does the Customer have Phone Service?', ('Yes', 'No'))
+        internetservice = st.selectbox("Does the Customer have Internet Service?", ('DSL', 'Fiber optic', 'No'))
+        onlinesecurity = st.selectbox("Does the Customer have Online Security?",('Yes','No','No Internet Service'))
+        onlinebackup = st.selectbox("Does the Customer have Online Backup?",('Yes','No','No Internet Service'))
+        techsupport = st.selectbox("Does the Customer have Technology Support?", ('Yes','No','No Internet Service'))
+        streamingtv = st.selectbox("Does the Customer Stream TV?", ('Yes','No','No Internet Service'))
+        streamingmovies = st.selectbox("Does the Customer Stream Movies?", ('Yes','No','No Internet Service'))
 
         data = {
                 'SeniorCitizen': seniorcitizen,
@@ -106,7 +104,7 @@ def main():
                 }
         features_df = pd.DataFrame.from_dict([data])
         st.markdown("<h3></h3>", unsafe_allow_html=True)
-        st.write('Overview of input is shown below')
+        st.write('Given Input: ')
         st.markdown("<h3></h3>", unsafe_allow_html=True)
         st.dataframe(features_df)
 
@@ -118,14 +116,14 @@ def main():
 
         if st.button('Predict'):
             if prediction == 1:
-                st.warning('Yes, the customer will terminate the service.')
+                st.warning('Yes, the Customer will Terminate the Service.')
             else:
-                st.success('No, the customer is happy with Telco Services.')
+                st.success('No, the Customer is Happy with Telco Services!')
         
 
     else:
-        st.subheader("Dataset upload")
-        uploaded_file = st.file_uploader("Choose a file")
+        st.subheader("Dataset Upload")
+        uploaded_file = st.file_uploader("Choose a File: ")
         if uploaded_file is not None:
             data = pd.read_csv(uploaded_file)
             #Get overview of data
@@ -137,8 +135,8 @@ def main():
                 #Get batch prediction
                 prediction = model.predict(preprocess_df)
                 prediction_df = pd.DataFrame(prediction, columns=["Predictions"])
-                prediction_df = prediction_df.replace({1:'Yes, the customer will terminate the service.', 
-                                                    0:'No, the customer is happy with Telco Services.'})
+                prediction_df = prediction_df.replace({1:'Yes, the Customer will Terminate the Service.', 
+                                                    0:'No, the Customer is Happy with Telco Services!'})
 
                 st.markdown("<h3></h3>", unsafe_allow_html=True)
                 st.subheader('Prediction')
