@@ -51,7 +51,8 @@ def main():
     #Setting Application description
     st.markdown("""
      :dart:  This app helps you Predict Customer Churn in the case of a fictional Telecommunications Company.\n
-     Dataset Used : "https://github.com/IBM/telco-customer-churn-on-icp4d/tree/master/data/Telco-Customer-Churn.csv"
+     Dataset Used : \n
+     "https://github.com/IBM/telco-customer-churn-on-icp4d/tree/master/data/Telco-Customer-Churn.csv"
     """)
     st.markdown("<h3></h3>", unsafe_allow_html=True)
 
