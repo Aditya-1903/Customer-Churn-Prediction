@@ -6,7 +6,7 @@ from PIL import Image
 
 #load the model from disk
 import joblib
-model = joblib.load(r"C:\Users\Aditya\OneDrive\Desktop\Data Science\Placement\Customer Churn Prediction\model.sav")
+model = joblib.load(r"https://github.com/Aditya-1903/Customer-Churn-Prediction/blob/main/model.sav")
 
 def preprocess(df, option):
     """
